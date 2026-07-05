@@ -22,11 +22,11 @@ class OrderAnalyzer:
         return filtered_df
 
     def calculate_metrics(self, df, file_name):
-        total_orders = len(df)
+        total_orders = int(len(df))
 
         if total_orders > 0:
-            total_revenue = df["total_amount"].sum()
-            average_check = df["total_amount"].mean()
+            total_revenue = float(df["total_amount"].sum())
+            average_check = float(df["total_amount"].mean())
         else:
             total_revenue = 0.0
             average_check = 0.0
@@ -46,7 +46,11 @@ class OrderAnalyzer:
         return result
 
     def run_batch_analysis(self):
-        csv_files = list(self.data_dir.glob("*.csv"))
+        all_files = list(self.data_dir.glob("*"))
+        csv_files = []
+        for single_file in all_files:
+                if single_file.suffix == ".csv":
+                    csv_files.append(single_file))
 
         if not csv_files:
             print("CSV файлов не найдено")
@@ -60,7 +64,7 @@ class OrderAnalyzer:
             try:
                 file_metrics = self.process_single_file(file_path)
                 all_reports.append(file_metrics)
-                success_count = success_count + 1
+                success_count += 1
             except Exception as error:
                 log_path = self.logs_dir / config.log_file
 
@@ -68,7 +72,7 @@ class OrderAnalyzer:
                 file_log.write(f"Ошибка в файле {file_path.name}: {str(error)}\n")
                 file_log.close()
 
-                error_count = error_count + 1
+                error_count +=1
 
         if len(all_reports) > 0:
             final_df = pd.DataFrame(all_reports)
