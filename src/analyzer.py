@@ -46,11 +46,11 @@ class OrderAnalyzer:
         return result
 
     def run_batch_analysis(self):
-        all_files = list(self.data_dir.glob("*"))
+        all_files = self.data_dir.glob("*.csv")
         csv_files = []
         for single_file in all_files:
                 if single_file.suffix == ".csv":
-                    csv_files.append(single_file))
+                    csv_files.append(single_file)
 
         if not csv_files:
             print("CSV файлов не найдено")
@@ -68,7 +68,7 @@ class OrderAnalyzer:
             except Exception as error:
                 log_path = self.logs_dir / config.log_file
 
-                file_log = open(log_path, "w", encoding="utf-8")
+                file_log = open(log_path, "a", encoding="utf-8")
                 file_log.write(f"Ошибка в файле {file_path.name}: {str(error)}\n")
                 file_log.close()
 
